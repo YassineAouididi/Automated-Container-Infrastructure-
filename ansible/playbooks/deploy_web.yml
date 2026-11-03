@@ -1,0 +1,7 @@
+---
+- name: Deploy Apache containers
+  hosts: linux_servers
+  become: true
+
+  roles:
+    - apache_container

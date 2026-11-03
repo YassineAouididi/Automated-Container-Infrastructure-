@@ -1,0 +1,7 @@
+---
+web_container_name: ansible-web
+web_image: httpd:2.4
+web_host_port: 8080
+web_container_port: 80
+web_content_path: /opt/automated-container-infrastructure
+web_container_path: /usr/local/apache2/htdocs

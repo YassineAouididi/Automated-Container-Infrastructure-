@@ -1,0 +1,35 @@
+worker_processes 1;
+
+include /etc/nginx/modules.d/*.conf;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+    types_hash_max_size 2048;
+
+    sendfile on;
+    keepalive_timeout 65;
+
+    upstream {{ nginx_upstream_name }} {
+{% for backend in nginx_backends %}
+        server {{ backend.host }}:{{ backend.port }};
+{% endfor %}
+    }
+
+    server {
+        listen {{ nginx_listen_port }};
+        server_name localhost;
+
+        location / {
+            proxy_pass http://{{ nginx_upstream_name }};
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+        }
+    }
+}

@@ -1,0 +1,13 @@
+---
+- name: Verify managed Linux servers
+  hosts: linux_servers
+  gather_facts: true
+
+  tasks:
+    - name: Display server hostname
+      ansible.builtin.debug:
+        msg: "Connected to {{ inventory_hostname }}"
+
+    - name: Verify Python is installed
+      ansible.builtin.command: python3 --version
+      changed_when: false
